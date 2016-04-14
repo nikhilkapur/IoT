@@ -6,7 +6,7 @@ from functools import cmp_to_key
 class fusionChart:
     """FusionChart Python Class"""
     
-    def __init__(self, chart_type='multi_combi', width=500, height=350, fusion_basedir='/fusioncharts-suite/js') :
+    def __init__(self, chart_type='multi_combi', width=500, height=350, fusion_basedir='/fusioncharts/js') :
         self.chart_type = chart_type
         self.width = width
         self.height = height
@@ -170,9 +170,9 @@ class fusionChart:
             # Check if a hline has been specified
             if len(self.hlines) > 0 :
                 xml += "<trendLines>"
-                for trend_key in self.hlines:   
+                for trend_key in self.hlines.keys():
                     attributes = ''
-                    for attr, value in self.hlines[trend_key]:
+                    for attr, value in self.hlines[trend_key].items():
                         attributes += " %s='%s'" % (attr, value)
                     xml += "<line displayValue='%s' %s />" % (trend_key, attributes)
                 xml += "</trendLines>"
