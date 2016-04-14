@@ -1,5 +1,3 @@
-# $Id: fusionCharts.py,v 1.5 2015/03/20 01:41:07 nkapur Exp $
-
 import re
 from functools import cmp_to_key
 
