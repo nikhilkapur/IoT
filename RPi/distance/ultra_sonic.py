@@ -16,6 +16,9 @@ class DistanceMeasurer:
         GPIO.setup(trig_pin, GPIO.OUT)                  #Set pin as GPIO out
         GPIO.setup(echo_pin, GPIO.IN)                   #Set pin as GPIO in
 
+    def __del__(self):
+        GPIO.cleanup()
+
     def get_dist(self):
         GPIO.output(self.trig_pin, False)               #Set trig_pin as LOW
         #print "Waiting For Sensor To Settle"
@@ -45,8 +48,8 @@ class DistanceMeasurer:
 ##############################################################################################################
 
 if __name__ == "__main__":
-    trig_pin = 18                                       #Associate pin 23 to trig_pin
-    echo_pin = 23                                       #Associate pin 24 to echo_pin
+    trig_pin = 18                                       #Associate pin 18 to trig_pin
+    echo_pin = 23                                       #Associate pin 23 to echo_pin
     dm = DistanceMeasurer(trig_pin, echo_pin)
     print "Distance measurement in progress"
     while True:
