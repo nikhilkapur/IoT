@@ -1,5 +1,7 @@
-#!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
-
+#!/usr/bin/python
+import os
 print "Content-type: text/html\n\n"
 
-print "Hello"
+print "<pre>"
+for k, v in os.environ.items():
+    print k, v
