@@ -3,8 +3,9 @@ import ultra_sonic
 import datetime
 #import time
 import MySQLdb
-import random
+#import random
 import os
+import ConfigParser
 
 def check_level():
     trig_pin = 18                                 #Associate pin 23 to trig_pin
@@ -14,14 +15,15 @@ def check_level():
     return dist
     #return random.randrange(2,400)
 
-def send_notification(level):
+def send_notification(level, config):
 
-    sender = 'salt-monitor@pizero'
-    recipients = ['nikhil@kapurs.net']
+    sender = config.get('general', 'sender')
+    recipients = [config.get('general', 'recipient')]
     subject = "Salt Level Low [%d]" % level
-    text = "http://home.kapurs.net:11680/cgi-bin/salt-monitor/salt_chart.py?days=60&show_raw=0"
+    text = config.get('general', 'chart_location') + "/salt_chart.py?days=60&show_raw=0"
         
     status = send_mail (sender, recipients, subject, text)
+    return status
 
 
 def send_mail(sender, recipients, subject, text):
@@ -37,8 +39,12 @@ def send_mail(sender, recipients, subject, text):
 
 
 
-def save_data(level):
-    db = MySQLdb.connect(host="localhost", user="salt_monitor", passwd="salt_monitor123", db="salt_monitor")
+def save_data(level, config):
+    db_host = config.get('database', 'db_host')
+    db_name = config.get('database', 'db_name')
+    db_user = config.get('database', 'db_user')
+    db_password = config.get('database', 'db_password')
+    db = MySQLdb.connect(host=db_host, user=db_user, passwd=db_password, db=db_name)
     cur = db.cursor()
     cur.execute("INSERT INTO salt_level (sl_level, sl_date) VALUES (%s, %s)", (level, datetime.datetime.today()))
     db.commit()
@@ -48,9 +54,13 @@ def save_data(level):
 ##############################################################
 
 if __name__ == "__main__":
+
+    config = ConfigParser.ConfigParser()
+    config.read('salt_monitor.cfg')
+    
     level = check_level()
     if level > 60:
-        send_notification (level)
-    save_data(level)
+        send_notification (level, config)
+    save_data(level, config)
     print level
     

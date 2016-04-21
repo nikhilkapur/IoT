@@ -3,9 +3,10 @@
 import fusionCharts
 import MySQLdb
 import cgi
-from pprint import pprint
+#from pprint import pprint
 #import salt_monitor
 import os
+import ConfigParser
 
 MAX  = 70                              # Max distance i.e. lowest salt level. % is calculated based on this
 WARN = 15                              # Level below which notifications start (%)
@@ -40,9 +41,15 @@ def create_chart(data):
     html = chart.getHTML('chart_div_name')
     return html
 
-def get_data(ndays):
+def get_data(ndays, config):
     data = {}
-    db = MySQLdb.connect(host="localhost", user="salt_monitor", passwd="salt_monitor123", db="salt_monitor")
+
+    db_host = config.get('database', 'db_host')
+    db_name = config.get('database', 'db_name')
+    db_user = config.get('database', 'db_user')
+    db_password = config.get('database', 'db_password')
+    db = MySQLdb.connect(host=db_host, user=db_user, passwd=db_password, db=db_name)
+    
     cur = db.cursor()
     cur.execute('''SELECT sl_level, sl_date FROM salt_level 
                    WHERE sl_date > (DATE_SUB(CURDATE(), INTERVAL %s DAY))
@@ -108,10 +115,13 @@ if __name__ == "__main__":
     update_now = int(form.getfirst('update_now', 0))
     show_raw = int(form.getfirst('show_raw', 0))
 
+    config = ConfigParser.ConfigParser()
+    config.read('salt_monitor.cfg')
+
     if update_now == 1:
         update_data()
 
-    data = get_data(ndays)
+    data = get_data(ndays, config)
     data_chart = sanitize_chart_data(data)
     print create_chart(data_chart)
     print get_form(ndays, show_raw, update_now)
