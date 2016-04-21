@@ -19,8 +19,8 @@ def send_notification(level, config):
 
     sender = config.get('general', 'sender')
     recipients = [config.get('general', 'recipient')]
+    text = config.get('general', 'chart_url')
     subject = "Salt Level Low [%d]" % level
-    text = config.get('general', 'chart_location') + "/salt_chart.py?days=60&show_raw=0"
         
     status = send_mail (sender, recipients, subject, text)
     return status
