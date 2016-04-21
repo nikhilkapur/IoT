@@ -67,7 +67,7 @@ class RGBled:
         try:  
             while 1:  
                 for i in range(0, 720, 5):  
-                    self.change_colour( self.PosSinWave(50, i, 0.5),  
+                    self.change_colors( self.PosSinWave(50, i, 0.5),  
                                         self.PosSinWave(50, i, 1),  
                                         self.PosSinWave(50, i, 2),  
                                         delay = 0.1 )  
@@ -80,8 +80,9 @@ if __name__ == "__main__":
     
     led = RGBled(23, 18, 25)
     
-    for i in range(5):
+    for i in range(3):
         led.cycle_colors(delay=0.01)
 
+    print "Sin Wave"
     led.change_colors_sin()
     GPIO.cleanup()
