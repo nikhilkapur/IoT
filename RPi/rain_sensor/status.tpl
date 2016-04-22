@@ -35,8 +35,10 @@
 		</table>
     <p>
 	 Config
-	  <form method="get" action="/update">
-      	<label>ZIP<input name="zipcode" type="text", value="{{data['config']['zipcode']}}"> </label>
+	  <!-- <form method="get" action="/update"> -->
+	  <form method="get" action="rs_server.py">
+      	<label>ZIP<input name="zipcode" type="text" value="{{data['config']['zipcode']}}"> </label>
+        <input name=command type=hidden value=update>
       	<p>
       	<input type="submit" value="Update">
       </form>
