@@ -20,7 +20,7 @@ def send_notification(level, config):
     sender = config.get('general', 'sender')
     recipients = [config.get('general', 'recipient')]
     text = config.get('general', 'chart_url')
-    subject = "Salt Level Low [%d]" % level
+    subject = "Salt Level Low [%.2f]" % level
         
     status = send_mail (sender, recipients, subject, text)
     return status
@@ -59,8 +59,8 @@ if __name__ == "__main__":
     config.read('salt_monitor.cfg')
     
     level = check_level()
-    if level > 60:
-        send_notification (level, config)
+    #if level > 60:
+    #    send_notification (level, config)
     save_data(level, config)
     print level
     
