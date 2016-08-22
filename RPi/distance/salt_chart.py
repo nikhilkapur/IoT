@@ -11,7 +11,7 @@ import ConfigParser
 MAX  = 70                              # Max distance i.e. lowest salt level. % is calculated based on this
 WARN = 15                              # Level below which notifications start (%)
 
-def create_chart(data):
+def create_chart(data, div_name='chart_div_name'):
     chart = fusionCharts.fusionChart (chart_type = 'multi_stacked_area',
                                       width = 800, height = 450)
     # Let fusionchart decide color instead of the list in our library
@@ -38,7 +38,7 @@ def create_chart(data):
             }
     chart.addHlines(hline)
     #html = chart.getHTMLheader()
-    html = chart.getHTML('chart_div_name')
+    html = chart.getHTML(div_name)
     return html
 
 def get_data(ndays, config):
@@ -65,6 +65,7 @@ def sanitize_chart_data(data):
     new_data = {}
     prev_level = None
     for date, level in sorted(data.items()):
+        level = float(level)
         if prev_level != None and abs(prev_level-level)*1.0/level > 0.1 :
             #print '<pre>Skipping:', date, level, prev_level, abs(prev_level-level)*1.0/level
             prev_level = level
@@ -79,7 +80,7 @@ def raw_data_html(data):
     html = "<table border=1>"
     for date, level in sorted(data.items()):
         html += '''<tr><td>%s</td>
-                       <td>%d</td>
+                       <td>%.2f</td>
                    </tr>''' % (date, level)
     html += '</html>'
     return html
