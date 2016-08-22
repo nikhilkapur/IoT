@@ -18,8 +18,8 @@ class DistanceMeasurer:
 
     # This may not be a good idea as the object could go out of scope while the rest of the calling program
     # is still using GPIO port. Better handled by the calling program
-    #def __del__(self):
-    #    GPIO.cleanup()
+    def __del__(self):
+        GPIO.cleanup()
 
     def get_dist(self):
         GPIO.output(self.trig_pin, False)               #Set trig_pin as LOW
