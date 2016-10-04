@@ -7,20 +7,23 @@ import time
 
 # Use BCM numbering
 GPIO.setmode(GPIO.BCM)
- 
-# Set pin 12 to output mode
-GPIO.setup(12, GPIO.OUT)
 
+pins = [14,15,18,23]
+ 
 def toggle_led(pin, delay=2): 
-    print "high"
-    GPIO.output(pin, GPIO.HIGH)
-    time.sleep(delay)
     print "low"
     GPIO.output(pin, GPIO.LOW)
     time.sleep(delay)
+    print "high"
+    GPIO.output(pin, GPIO.HIGH)
+    time.sleep(delay)
 
-for i in range(4):
-    toggle_led(12, delay=2)
+for pin in pins:
+    GPIO.setup(pin, GPIO.OUT)
+
+for pin in pins:
+    print pin
+    toggle_led(pin, delay=2)
     
 GPIO.cleanup()
                 
