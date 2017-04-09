@@ -9,6 +9,7 @@ import time
 GPIO.setmode(GPIO.BCM)
  
 # Set pin 12 to output mode
+led_port_list = [24,25,7]
 GPIO.setup(12, GPIO.OUT)
 
 def toggle_led(pin, delay=2): 
@@ -19,8 +20,8 @@ def toggle_led(pin, delay=2):
     GPIO.output(pin, GPIO.LOW)
     time.sleep(delay)
 
-for i in range(4):
-    toggle_led(12, delay=2)
+for port in led_port_list:
+    toggle_led(port, delay=2)
     
 GPIO.cleanup()
                 
