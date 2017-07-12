@@ -6,6 +6,11 @@ import RPi.GPIO as GPIO
 #import gpio as GPIO
   
 import time
+import os
+import cgi
+import cgitb
+cgitb.enable()
+
 
 class recliner:
     def __init__(self, up_pin=27, down_pin=17, on_level=GPIO.LOW, gpio_mode=GPIO.BCM, recline_time=9):
@@ -39,19 +44,30 @@ class recliner:
         GPIO.output(self.down_pin, self.off_level)
              
     
-if __name__ == "__main__":
+if os.environ.get('SCRIPT_NAME') != None:
+    print "Content-type: text/html\n"
+    form = cgi.FieldStorage()
+    command = form.getvalue('command', '')
+    percent = int(form.getvalue('percent', 100))
     r = recliner ()
-    r.up()
-    time.sleep(2)
-    r.down()
-    time.sleep(2)
+    if command == 'up':
+        r.up(percent)
+    if command == 'down':
+        r.down(percent)
 
-    r.up(50)
+    print "Done"
+
+elif __name__ == "__main__":
+    r = recliner ()
+    #r.up()
+    #time.sleep(2)
+    #r.down()
+    #time.sleep(2)
+
+    r.up(20)
     time.sleep(2)
-    r.down(50)
+    r.down(20)
     time.sleep(2)
 
     GPIO.cleanup()
 
-     
-                
