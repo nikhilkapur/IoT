@@ -2,13 +2,13 @@
 
 from __future__ import division
 
-#import RPi.GPIO as GPIO
-import gpio as GPIO
+import RPi.GPIO as GPIO
+#import gpio as GPIO
   
 import time
 
 class recliner:
-    def init(self, up_pin=17, down_pin=27, on_level=GPIO.LOW, gpio_mode=GPIO.BCM, recline_time=10):
+    def __init__(self, up_pin=27, down_pin=17, on_level=GPIO.LOW, gpio_mode=GPIO.BCM, recline_time=9):
         GPIO.setmode(gpio_mode)
         self.recline_time = recline_time
         self.up_pin = up_pin
@@ -19,11 +19,12 @@ class recliner:
         else:
             self.on_level  = GPIO.HIGH
             self.off_level = GPIO.LOW
-        self.reset()
+
+        self.init()
     
-    def reset(self):
-        GPIO.output(self.up_pin, self.off_level) 
-        GPIO.output(self.down_pin, self.off_level) 
+    def init(self):
+        GPIO.setup(self.up_pin, GPIO.OUT, initial=self.off_level)
+        GPIO.setup(self.down_pin, GPIO.OUT, initial=self.off_level)
     
     def up(self, percent=100):
         duration = int(self.recline_time * percent/100 +0.5)
@@ -39,7 +40,7 @@ class recliner:
              
     
 if __name__ == "__main__":
-    r = recliner (up_pin=17, down_pin=27)
+    r = recliner ()
     r.up()
     time.sleep(2)
     r.down()
