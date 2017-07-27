@@ -30,9 +30,12 @@ class DistanceMeasurer:
         time.sleep(0.00001)                             #Delay of 0.00001 seconds
         GPIO.output(self.trig_pin, False)               #Set trig_pin as LOW
 
+        trig_time = time.time()
         while GPIO.input(self.echo_pin)==0:             #Check whether the echo_pin is LOW
             pulse_start = time.time()                   #Saves the last known time of LOW pulse
-
+            if pulse_start - trig_time > 5:             # TImeout in 5 seconds
+                raise RuntimeError ("Timeout waiting for echo signal.")
+            
         while GPIO.input(self.echo_pin)==1:             #Check whether the echo_pin is HIGH
             pulse_end = time.time()                     #Saves the last known time of HIGH pulse 
 
@@ -60,7 +63,7 @@ if __name__ == "__main__":
             dist = dm.get_dist()
             print 'Distance is %f' % dist
         except RuntimeError, e:
-            print 'ERR Distance is %s' % e
+            print 'ERROR: %s' % e
          
     GPIO.cleanup()   
         
